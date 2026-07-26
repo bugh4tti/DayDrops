@@ -1,0 +1,14 @@
+enabled: true
+
+messages:
+  no-permission: "&cNo tienes permiso para usar este comando."
+  only-players: "&cSolo los jugadores pueden usar este comando."
+  reloaded: "&aLa configuración de DayDrops se recargó correctamente."
+  enabled: "&aDayDrops ha sido activado."
+  disabled: "&cDayDrops ha sido desactivado."
+  already-enabled: "&eDayDrops ya estaba activado."
+  already-disabled: "&eDayDrops ya estaba desactivado."
+  item-set: "&aEl item de dropeo se actualizó correctamente."
+  item-removed: "&eSe quitó el item de dropeo configurado."
+  menu-title: "&8DayDrops - Configuración"
+  unknown-command: "&cComando desconocido. Usa /daydrops help"
