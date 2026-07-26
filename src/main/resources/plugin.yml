@@ -1,0 +1,20 @@
+name: DayDrops
+version: '1.0.0'
+main: com.bughatti.daydrops.DayDrops
+api-version: '1.20'
+author: Bughatti
+description: Configura un item exclusivo que dropean todos los jugadores al morir, ignorando keepInventory.
+
+commands:
+  daydrops:
+    description: Comando principal de DayDrops
+    usage: /daydrops [help|reload|enable|disable]
+    aliases: [dd]
+
+permissions:
+  daydrops.admin:
+    description: Permite administrar DayDrops (reload, enable, disable, colocar item)
+    default: op
+  daydrops.use:
+    description: Permite abrir el menú de configuración
+    default: op
