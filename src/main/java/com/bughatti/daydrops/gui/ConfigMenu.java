@@ -28,7 +28,7 @@ public class ConfigMenu {
             inv.setItem(slot, border);
         }
 
-        inv.setItem(ITEM_SLOT, createCenterItem(plugin));
+        inv.setItem(ITEM_SLOT, buildCenterItem(plugin));
 
         player.openInventory(inv);
     }
@@ -43,7 +43,7 @@ public class ConfigMenu {
         return pane;
     }
 
-    private static ItemStack createCenterItem(DayDrops plugin) {
+    public static ItemStack buildCenterItem(DayDrops plugin) {
         ItemStack configured = plugin.getDropItem();
 
         if (configured != null && configured.getType() != Material.AIR) {
@@ -55,8 +55,9 @@ public class ConfigMenu {
                 lore.add(ChatColor.GRAY + "Este es el item que actualmente");
                 lore.add(ChatColor.GRAY + "dropean todos los jugadores al morir.");
                 lore.add("");
-                lore.add(ChatColor.YELLOW + "» Coloca otro item aquí para reemplazarlo.");
-                lore.add(ChatColor.YELLOW + "» Click para quitarlo.");
+                lore.add(ChatColor.YELLOW + "» Pulsa Q sobre otro item de tu inventario");
+                lore.add(ChatColor.YELLOW + "  para reemplazarlo.");
+                lore.add(ChatColor.YELLOW + "» Click aquí para quitarlo.");
                 meta.setLore(lore);
                 display.setItemMeta(meta);
             }
@@ -69,8 +70,9 @@ public class ConfigMenu {
             meta.setDisplayName(ChatColor.YELLOW + "Coloca el item que dropearán los jugadores");
             List<String> lore = new ArrayList<>();
             lore.add("");
-            lore.add(ChatColor.GRAY + "Arrastra aquí el item exclusivo que");
-            lore.add(ChatColor.GRAY + "recibirán los jugadores al matar a alguien.");
+            lore.add(ChatColor.GRAY + "Pon el cursor sobre un item de tu inventario");
+            lore.add(ChatColor.GRAY + "y pulsa Q para configurarlo como el item");
+            lore.add(ChatColor.GRAY + "exclusivo que recibirán los jugadores al matar.");
             lore.add("");
             lore.add(ChatColor.GRAY + "Se dropeará sin importar si la víctima");
             lore.add(ChatColor.GRAY + "tiene o no keepInventory activado.");
@@ -90,4 +92,4 @@ public class ConfigMenu {
         }
         return slots.stream().mapToInt(Integer::intValue).toArray();
     }
-              }
+                    }
