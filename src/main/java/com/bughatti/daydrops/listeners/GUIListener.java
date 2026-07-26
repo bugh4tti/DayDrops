@@ -7,9 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class GUIListener implements Listener {
 
@@ -30,23 +32,51 @@ public class GUIListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (!player.hasPermission("daydrops.admin")) return;
 
-        ItemStack cursor = event.getCursor();
-        ItemStack clicked = event.getCurrentItem();
+        ItemStack currentSlotItem = event.getCurrentItem();
+        boolean isPlaceholder = currentSlotItem != null
+                && currentSlotItem.getType() == Material.NETHER_STAR
+                && plugin.getDropItem() == null;
+        boolean slotHasRealItem = currentSlotItem != null
+                && currentSlotItem.getType() != Material.AIR
+                && !isPlaceholder;
 
-        if (cursor != null && cursor.getType() != Material.AIR) {
-            plugin.setDropItem(cursor.clone());
-            player.setItemOnCursor(null);
+        // Swap usando la tecla de número (1-9) apuntando al hotbar
+        if (event.getClick() == ClickType.NUMBER_KEY) {
+            PlayerInventory playerInv = player.getInventory();
+            int hotbarSlot = event.getHotbarButton();
+            ItemStack hotbarItem = playerInv.getItem(hotbarSlot);
+            boolean hotbarHasItem = hotbarItem != null && hotbarItem.getType() != Material.AIR;
+
+            if (hotbarHasItem) {
+                ItemStack newItem = hotbarItem.clone();
+                ItemStack previous = slotHasRealItem ? plugin.getDropItem().clone() : null;
+                plugin.setDropItem(newItem);
+                playerInv.setItem(hotbarSlot, previous);
+                player.sendMessage(plugin.msg("item-set"));
+                ConfigMenu.open(plugin, player);
+            }
+            return;
+        }
+
+        ItemStack cursor = event.getCursor();
+        boolean cursorHasItem = cursor != null && cursor.getType() != Material.AIR;
+
+        if (cursorHasItem) {
+            // Coloca el item del cursor; si ya había uno configurado, se lo devuelve al cursor (swap)
+            ItemStack newItem = cursor.clone();
+            ItemStack previous = slotHasRealItem ? plugin.getDropItem().clone() : null;
+            plugin.setDropItem(newItem);
+            player.setItemOnCursor(previous);
             player.sendMessage(plugin.msg("item-set"));
             ConfigMenu.open(plugin, player);
             return;
         }
 
-        boolean isPlaceholder = clicked != null
-                && clicked.getType() == Material.NETHER_STAR
-                && plugin.getDropItem() == null;
-
-        if (clicked != null && clicked.getType() != Material.AIR && !isPlaceholder) {
+        if (slotHasRealItem) {
+            // Recoge el item configurado y lo deja en el cursor para poder moverlo
+            ItemStack toCursor = plugin.getDropItem().clone();
             plugin.setDropItem(null);
+            player.setItemOnCursor(toCursor);
             player.sendMessage(plugin.msg("item-removed"));
             ConfigMenu.open(plugin, player);
         }
@@ -58,4 +88,4 @@ public class GUIListener implements Listener {
             event.setCancelled(true);
         }
     }
-}
+                }
